@@ -3,7 +3,18 @@ import {render, RenderResult} from '@testing-library/react';
 import { ThemeProvider } from 'styled-components';
 import {SetState, Component as ComponentType} from '@dmd/types'
 
-import { Config, Configs, MockedSetState, QueriesObject } from "./index.types"
+import { Config, Configs, MockedSetState, MockedShallowComponent, QueriesObject, ShallowProps } from "./index.types"
+
+/**
+ * shallow rendering component
+ * @param componentName component name
+ * @returns mocked shallow component
+ */
+export const shallowRender =
+<Props,>(componentName: string):MockedShallowComponent<Props>=>jest.fn(
+(props:ShallowProps<Props>) => 
+<div id={componentName}>{props.children}</div>
+)
 
 /**
  * create mock setState with function as it's params
