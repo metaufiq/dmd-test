@@ -1,20 +1,9 @@
 import React from 'react';
-import {render, RenderResult} from '@testing-library/react';
+import renderer, { ReactTestRenderer} from 'react-test-renderer';
 import { ThemeProvider } from 'styled-components';
 import {SetState, Component as ComponentType} from '@dmd/types'
 
-import { Config, Configs, MockedSetState, MockedShallowComponent, QueriesObject, ShallowProps } from "./index.types"
-
-/**
- * shallow rendering component
- * @param componentName component name
- * @returns mocked shallow component
- */
-export const shallowRender =
-<Props,>(componentName: string):MockedShallowComponent<Props>=>jest.fn(
-(props:ShallowProps<Props>) => 
-<div id={componentName}>{props.children}</div>
-)
+import { Config, Configs, MockedSetState } from "./index.types"
 
 /**
  * create mock setState with function as it's params
@@ -32,17 +21,17 @@ export const mockFunctionSetState = (initialState: any): MockedSetState => {
  * 
  * @param {ComponentType<Props>} Component 
  * @param {Config<Props>} param1 
- * @returns {RenderResult<Queries, HTMLElement, HTMLElement>}
+ * @returns {ReactTestRenderer}
  */
 const _renderContainer = <Props,>(
   Component:ComponentType<Props>,
   {useTheme, props, theme}: Config<Props>
-): RenderResult<QueriesObject, HTMLElement, HTMLElement>=>{
+): ReactTestRenderer=>{
   if (!useTheme) {
-    return render(<Component {...props!}/>)
+    return renderer.create(<Component {...props!}/>)
   }
 
-  return render(<ThemeProvider theme={theme!}>
+  return renderer.create(<ThemeProvider theme={theme}>
     <Component {...props!}/>
     </ThemeProvider>)
 }
@@ -65,7 +54,7 @@ export const assertSnapshots = <Props,>(Component:ComponentType<Props>, configs:
       jest.useFakeTimers()
       const container = _renderContainer(Component, config)
       
-      const result = container.asFragment();
+      const result = container.toJSON();
     
       expect(result).toMatchSnapshot()
     })

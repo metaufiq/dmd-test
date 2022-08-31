@@ -1,11 +1,5 @@
 import { Component as ComponentType } from '@dmd/types';
-import { Configs, MockedSetState, MockedShallowComponent } from "./index.types";
-/**
- * shallow rendering component
- * @param componentName component name
- * @returns mocked shallow component
- */
-export declare const shallowRender: <Props>(componentName: string) => MockedShallowComponent<Props>;
+import { Configs, MockedSetState } from "./index.types";
 /**
  * create mock setState with function as it's params
  * @param {any} initialState previous state
